@@ -13,23 +13,23 @@ ANBOX_MODULES_URL="https://github.com/choff/anbox-modules/archive/refs/heads/mas
 TEMP_DIR="/tmp/waydroid-dkms-setup"
 
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo "[INFO] $1"
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo "[SUCCESS] $1"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo "[WARNING] $1"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo "[ERROR] $1"
 }
 
 log_step() {
-    echo -e "${CYAN}[STEP]${NC} $1"
+    echo "[STEP] $1"
 }
 
 check_root() {
