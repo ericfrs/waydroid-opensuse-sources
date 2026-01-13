@@ -2,7 +2,7 @@
 
 Name:           waydroid
 Version:        1.6.1
-Release:        0
+Release:        1
 Summary:        Container-based approach to boot a full Android system on GNU/Linux
 License:        GPL-3.0-only
 Group:          System/Emulators/Other
@@ -120,21 +120,32 @@ Waydroid Installation Complete
 ================================================================================
 
 Setup binder module (required):
-    sudo waydroid-help install
-    sudo waydroid-help load
+    
+    Recommended - Simplified setup:
+        sudo waydroid-binder setup
+        sudo reboot
+        sudo waydroid-binder status
+    
+    Alternative - Fix device persistence issues:
+        sudo waydroid-help complete-setup
+        sudo reboot
+        sudo waydroid-help status
 
 Initialize Waydroid:
     sudo waydroid init
     sudo systemctl start waydroid-container.service
 
 Check status:
+    waydroid-binder status
     waydroid-help status
 
-For more commands: waydroid-help help
+For more commands:
+    waydroid-binder
+    waydroid-help
 
 To uninstall in the future:
-    Remove all data and binder module: sudo waydroid-help cleanup
-    Remove only binder module: sudo waydroid-help uninstall
+    sudo waydroid-binder uninstall
+    sudo waydroid-help cleanup
 ================================================================================
 
 EOF
@@ -148,9 +159,11 @@ Waydroid Upgrade Complete
 ================================================================================
 
 Check module compatibility:
+    waydroid-binder status
     waydroid-help status
 
-Rebuild if needed:
+Rebuild if needed (waydroid-help only):
+    sudo waydroid-help post-upgrade
     sudo waydroid-help rebuild-all
 
 Restart Waydroid:
@@ -183,6 +196,7 @@ fi
 %{_prefix}/lib/waydroid
 %{_bindir}/waydroid
 %{_sbindir}/waydroid-help
+%{_sbindir}/waydroid-binder
 %{_unitdir}/waydroid-container.service
 %{_datadir}/applications/Waydroid.desktop
 %{_datadir}/applications/waydroid.market.desktop
@@ -208,12 +222,13 @@ fi
 %changelog
 * Tue Jan 13 2026 James Ed Randson <jimedrand@disroot.org> - 1.6.1-0
 - Update to version 1.6.1
-- Added waydroid-help management tool for binder module setup
+- Added waydroid-help for device persistence fixes
+- Added waydroid-binder for simplified DKMS management
 - Removed automatic post-install/upgrade actions
-- User must manually run waydroid-help commands
+- User must manually run setup commands
 - Removed dev-binderfs.mount handling
 - Removed manual DKMS dependencies from package
-- Removed binder module files (handled by waydroid-help)
+- Removed binder module files (handled by management tools)
 - Removed ashmem module dependency (mainline kernel)
 - Enhanced systemd service configuration
 - Added gbinder configuration file
