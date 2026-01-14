@@ -20,6 +20,9 @@ require {
 	role rpm_script_roles;
 	type iptables_t;
 	type systemd_systemctl_exec_t;
+	type dma_device_t;
+	type kernel_t;
+	type debugfs_t;
 }
 
 # Define domain
@@ -101,15 +104,33 @@ allow waydroid_t self:unix_dgram_socket { create setopt getopt };
 
 # Use binder devices
 allow waydroid_t binderfs_t:dir search_dir_perms;
+allow waydroid_t binderfs_t:dir read;
+allow waydroid_t binderfs_t:chr_file { getattr setattr };
 allow waydroid_t binder_device_t:chr_file { getattr setattr ioctl map open read write };
 allow waydroid_t container_runtime_t:binder { call transfer };
+allow waydroid_t device_t:dir { write add_name create };
+allow waydroid_t device_t:chr_file { getattr setattr };
+allow waydroid_t device_t:lnk_file create;
+allow waydroid_t dma_device_t:chr_file { getattr setattr };
 allow container_runtime_t waydroid_t:binder call;
 allow container_runtime_t self:binder { call set_context_mgr transfer };
 allow container_runtime_t self:capability2 mac_admin;
 allow container_runtime_t unconfined_service_t:binder call;
 allow container_runtime_t unconfined_t:binder { call transfer };
 allow unconfined_service_t container_runtime_t:binder { call transfer };
-allow unconfined_t container_runtime_t:binder { call transfer };
+allow unconfined_t container_runtime_t:binder { call transfer }; 
+
+# Allow waydroid to load binder module
+allow waydroid_t kernel_t:system module_request;
+
+# Unix socket
+allow waydroid_t self:unix_dgram_socket ioctl;
+
+# Systemd
+allow waydroid_t systemd_systemctl_exec_t:file { execute execute_no_trans open read };
+
+# Debugfs
+allow waydroid_t debugfs_t:file { getattr setattr };
 
 # Graphics
 dev_setattr_generic_dirs(waydroid_t)
