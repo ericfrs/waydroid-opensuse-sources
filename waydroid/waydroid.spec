@@ -85,7 +85,7 @@ install -p -m 0644 SELinux/%{name}.pp %{buildroot}%{_datadir}/selinux/%{selinuxt
 %endif
 
 install -d %{buildroot}%{_datadir}/gbinder/config
-install -p -m 0644 %{SOURCE4} %{buildroot}%{_datadir}/gbinder/config/waydroid.conf
+install -p -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/gbinder/config/waydroid.conf
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/Waydroid.desktop
