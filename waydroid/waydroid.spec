@@ -10,8 +10,7 @@ URL:            https://github.com/waydroid/waydroid
 Source0:        https://github.com/waydroid/waydroid/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        waydroid.te
 Source2:        waydroid.fc
-Source3:        waydroid-help.sh
-Source4:        waydroid.conf
+Source3:        waydroid.conf
 Patch0:         setup-firewalld.patch
 Patch1:         mount-secontext.patch
 
@@ -80,9 +79,6 @@ cd ..
 
 %py3_compile %{buildroot}%{_prefix}/lib/waydroid
 
-install -d %{buildroot}%{_sbindir}
-install -p -m 0755 %{SOURCE3} %{buildroot}%{_sbindir}/waydroid-help
-
 %if 0%{?suse_version}
 install -d %{buildroot}%{_datadir}/selinux/%{selinuxtype}
 install -p -m 0644 SELinux/%{name}.pp %{buildroot}%{_datadir}/selinux/%{selinuxtype}/
@@ -119,35 +115,6 @@ cat << 'EOF'
 Waydroid Installation Complete
 ================================================================================
 
-Setup binder module (required):
-    
-    Recommended - Simplified setup:
-        sudo waydroid-binder setup
-        sudo reboot
-        sudo waydroid-binder status
-    
-    Alternative - Fix device persistence issues:
-        sudo waydroid-help complete-setup
-        sudo reboot
-        sudo waydroid-help status
-
-Initialize Waydroid:
-    sudo waydroid init
-    sudo systemctl start waydroid-container.service
-
-Check status:
-    waydroid-binder status
-    waydroid-help status
-
-For more commands:
-    waydroid-binder
-    waydroid-help
-
-To uninstall in the future:
-    sudo waydroid-binder uninstall
-    sudo waydroid-help cleanup
-================================================================================
-
 EOF
 fi
 
@@ -156,18 +123,6 @@ cat << 'EOF'
 
 ================================================================================
 Waydroid Upgrade Complete
-================================================================================
-
-Check module compatibility:
-    waydroid-binder status
-    waydroid-help status
-
-Rebuild if needed (waydroid-help only):
-    sudo waydroid-help post-upgrade
-    sudo waydroid-help rebuild-all
-
-Restart Waydroid:
-    sudo systemctl restart waydroid-container.service
 ================================================================================
 
 EOF
@@ -195,8 +150,6 @@ fi
 %doc README.md
 %{_prefix}/lib/waydroid
 %{_bindir}/waydroid
-%{_sbindir}/waydroid-help
-%{_sbindir}/waydroid-binder
 %{_unitdir}/waydroid-container.service
 %{_datadir}/applications/Waydroid.desktop
 %{_datadir}/applications/waydroid.market.desktop
@@ -220,16 +173,3 @@ fi
 %endif
 
 %changelog
-* Tue Jan 13 2026 James Ed Randson <jimedrand@disroot.org> - 1.6.1-0
-- Update to version 1.6.1
-- Added waydroid-help for device persistence fixes
-- Added waydroid-binder for simplified DKMS management
-- Removed automatic post-install/upgrade actions
-- User must manually run setup commands
-- Removed dev-binderfs.mount handling
-- Removed manual DKMS dependencies from package
-- Removed binder module files (handled by management tools)
-- Removed ashmem module dependency (mainline kernel)
-- Enhanced systemd service configuration
-- Added gbinder configuration file
-- Simplified package to core Waydroid components only
