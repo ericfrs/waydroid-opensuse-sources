@@ -109,7 +109,7 @@ allow waydroid_t binderfs_t:chr_file { getattr setattr };
 allow waydroid_t binder_device_t:chr_file { getattr setattr ioctl map open read write };
 allow waydroid_t container_runtime_t:binder { call transfer };
 allow waydroid_t device_t:dir { write add_name create };
-allow waydroid_t device_t:chr_file { getattr setattr };
+allow waydroid_t device_t:chr_file { getattr setattr read write open ioctl };
 allow waydroid_t device_t:lnk_file create;
 allow waydroid_t dma_device_t:chr_file { getattr setattr };
 allow container_runtime_t waydroid_t:binder call;
