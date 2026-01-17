@@ -1,5 +1,5 @@
 #
-# spec file for package anbox-modules
+# spec file for package waydroid14x
 #
 # Copyright (c) 2026 SUSE LLC
 # Copyright (c) 2026 James "Jim" Ed Randson <jimedrand@disroot.org>
