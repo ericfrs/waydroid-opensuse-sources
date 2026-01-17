@@ -1,7 +1,8 @@
 #
-# spec file for package libgbinder1
+# spec file for package anbox-modules
 #
 # Copyright (c) 2026 SUSE LLC
+# Copyright (c) 2026 James "Jim" Ed Randson <jimedrand@disroot.org>
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
