@@ -62,13 +62,12 @@ Requires:       python3-gbinder
 Requires:       python3-gobject
 Requires:       hicolor-icon-theme
 Requires:       desktop-file-utils
-Recommends:     dkms
-Recommends:     kernel-devel
-
-%if 0%{?suse_version}
 Requires:       container-selinux
-BuildRequires:  container-selinux
-%endif
+
+# Provide choice between DKMS and KMP for kernel modules
+# anbox-modules is a meta package that will pull appropriate KMP
+Requires:       (anbox-modules-dkms or anbox-modules)
+Recommends:     anbox-modules-dkms
 
 %description
 Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system. It uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.
@@ -86,21 +85,17 @@ cp %{SOURCE2} SELinux/
 sed -i -e '/"system_channel":/ s/: ".*"/: ""/' tools/config/__init__.py
 sed -i -e '/"vendor_channel":/ s/: ".*"/: ""/' tools/config/__init__.py
 
-%if 0%{?suse_version}
 cd SELinux
 %make_build NAME=%{selinuxtype} -f %{_datadir}/selinux/devel/Makefile
 cd ..
-%endif
 
 %install
 %make_install LIBDIR=%{_libdir} DESTDIR=%{buildroot} USE_SYSTEMD=1 USE_DBUS_ACTIVATION=1 USE_NFTABLES=1
 
 %py3_compile %{buildroot}%{_prefix}/lib/waydroid
 
-%if 0%{?suse_version}
 install -d %{buildroot}%{_datadir}/selinux/%{selinuxtype}
 install -p -m 0644 SELinux/%{name}.pp %{buildroot}%{_datadir}/selinux/%{selinuxtype}/
-%endif
 
 install -d %{buildroot}%{_datadir}/gbinder/config
 install -p -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/gbinder/config/waydroid.conf
@@ -113,17 +108,11 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/id.waydro
 
 %pre
 %service_add_pre waydroid-container.service
-
-%if 0%{?suse_version}
 %selinux_relabel_pre -s %{selinuxtype}
-%endif
 
 %post
-%if 0%{?suse_version}
 %selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/%{selinuxtype}/%{name}.pp
 %selinux_relabel_post -s %{selinuxtype}
-%endif
-
 %service_add_post waydroid-container.service
 
 if [ $1 -eq 1 ]; then
@@ -132,6 +121,21 @@ cat << 'EOF'
 ================================================================================
 Waydroid Installation Complete
 ================================================================================
+
+Kernel modules required. Choose one:
+
+1. anbox-modules-dkms (recommended)
+   - Rebuilds automatically for every kernel update
+   - Works with all kernel flavors (default, longterm, etc.)
+   Install: zypper install anbox-modules-dkms
+
+2. anbox-modules (KMP - Kernel Module Package)
+   - Pre-compiled for specific kernel version
+   - Faster installation, no compilation needed
+   - Auto-selects correct variant for your kernel
+   Install: zypper install anbox-modules
+
+After installing, load module: sudo modprobe binder_linux
 
 EOF
 fi
@@ -156,12 +160,10 @@ fi
 %postun
 %service_del_postun waydroid-container.service
 
-%if 0%{?suse_version}
 if [ $1 -eq 0 ]; then
     %selinux_modules_uninstall -s %{selinuxtype} %{name}
     %selinux_relabel_post -s %{selinuxtype}
 fi
-%endif
 
 %files
 %license LICENSE
@@ -185,9 +187,11 @@ fi
 %dir %{_datadir}/gbinder
 %dir %{_datadir}/gbinder/config
 %{_datadir}/gbinder/config/waydroid.conf
-
-%if 0%{?suse_version}
 %{_datadir}/selinux/%{selinuxtype}/%{name}.pp
-%endif
 
 %changelog
+* Sun Jan 18 2026 James "Jim" Ed Randson <jimedrand@disroot.org>
+- Add flexible kernel module dependency support
+- Allow choice between anbox-modules-dkms or anbox-modules (KMP)
+- Recommend DKMS for better compatibility across kernel updates
+- Simplify post-install message
