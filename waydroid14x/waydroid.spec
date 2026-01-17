@@ -1,13 +1,15 @@
 %define selinuxtype targeted
+%define upstream_name waydroid
+%define upstream_version 1.4.3
 
 Name:           waydroid14x
-Version:        1.4.3
+Version:        %{upstream_version}
 Release:        1
-Summary:        Container-based approach to boot a full Android system on GNU/Linux
+Summary:        Container-based approach to boot a full Android system on GNU/Linux (version 1.4.x for running Android 11)
 License:        GPL-3.0-only
 Group:          System/Emulators/Other
 URL:            https://github.com/waydroid/waydroid
-Source0:        https://github.com/waydroid/waydroid/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/waydroid/waydroid/archive/refs/tags/%{upstream_version}.tar.gz#/%{upstream_name}-%{upstream_version}.tar.gz
 Source1:        waydroid.te
 Source2:        waydroid.fc
 Source3:        waydroid.conf
@@ -52,13 +54,18 @@ Requires:       container-selinux
 BuildRequires:  container-selinux
 %endif
 
+Conflicts:      waydroid
+Provides:       waydroid = %{version}-%{release}
+
 %description
 Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system. It uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.
 
 The Android inside the container has direct access to needed hardware through LXC. The Android runtime environment ships with a minimal customized Android system image based on LineageOS.
 
+This package is specifically for Waydroid 1.4.x series, designed to run Android 11.
+
 %prep
-%autosetup -p1
+%autosetup -p1 -n %{upstream_name}-%{upstream_version}
 
 mkdir -p SELinux
 cp %{SOURCE1} SELinux/
@@ -81,7 +88,7 @@ cd ..
 
 %if 0%{?suse_version}
 install -d %{buildroot}%{_datadir}/selinux/%{selinuxtype}
-install -p -m 0644 SELinux/%{name}.pp %{buildroot}%{_datadir}/selinux/%{selinuxtype}/
+install -p -m 0644 SELinux/waydroid.pp %{buildroot}%{_datadir}/selinux/%{selinuxtype}/%{name}.pp
 %endif
 
 install -d %{buildroot}%{_datadir}/gbinder/config
@@ -112,8 +119,11 @@ if [ $1 -eq 1 ]; then
 cat << 'EOF'
 
 ================================================================================
-Waydroid Installation Complete
+Waydroid 1.4.x (Android 11) Installation Complete
 ================================================================================
+
+This is Waydroid 1.4.x specifically for running Android 11.
+To initialize Waydroid, run: waydroid init
 
 EOF
 fi
@@ -122,7 +132,7 @@ if [ $1 -gt 1 ]; then
 cat << 'EOF'
 
 ================================================================================
-Waydroid Upgrade Complete
+Waydroid 1.4.x (Android 11) Upgrade Complete
 ================================================================================
 
 EOF
@@ -173,3 +183,5 @@ fi
 %endif
 
 %changelog
+* Sat Jan 17 2026 James "Jim" Ed Randson <jimedrand@example.com> - 1.4.3-1
+- Initial package for waydroid14x (Waydroid 1.4.x for Android 11)
