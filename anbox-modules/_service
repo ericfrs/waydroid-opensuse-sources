@@ -1,0 +1,19 @@
+<services>
+  <service name="obs_scm">
+    <param name="scm">git</param>
+    <param name="url">https://github.com/llyyr/anbox-modules.git</param>
+    <param name="revision">master</param>
+    <param name="versionformat">%cd.%h</param>
+    <param name="changesgenerate">enable</param>
+    <param name="changesauthor">llyyr.public@gmail.com</param>
+  </service>
+
+  <service name="set_version"/>
+
+  <service name="tar" mode="buildtime"/>
+
+  <service name="recompress" mode="buildtime">
+    <param name="compression">gz</param>
+    <param name="file">*.tar</param>
+  </service>
+</services>
