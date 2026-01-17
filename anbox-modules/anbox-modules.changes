@@ -1,0 +1,54 @@
+-------------------------------------------------------------------
+Sun May 26 18:15:09 UTC 2024 - munix9@googlemail.com
+
+- Update to version 20240526.ee4c25f:
+  * fix creation of all 3 anbox modules symlinks: anbox-binder anbox-hwbinder anbox-vndbinder
+
+-------------------------------------------------------------------
+Sat Apr 13 09:57:12 UTC 2024 - munix9@googlemail.com
+
+- Update to version 20240402.2c06452:
+  * updated doc to update changelog from git commits
+  * Added packaging guide and compat fix
+  * removed obsolete name="%k", added binder symlink (#1)
+
+-------------------------------------------------------------------
+Sun Feb 11 14:49:57 UTC 2024 - munix9@googlemail.com
+
+- Update to version 20240210.44e5ba7:
+  * Fixes for kernel 6.8
+
+-------------------------------------------------------------------
+Sun Jan 14 05:25:38 UTC 2024 - Erefd X <zzndb001@gmail.com>
+
+- Change upstream active fork https://github.com/choff/anbox-modules
+
+-------------------------------------------------------------------
+Sun Jan 14 05:22:59 UTC 2024 - munix9@googlemail.com
+
+- Update to version 20240113.13a93a4:
+  * Fix for kernel 6.7+
+  * Added conditional matching for kernels >= 6.3.0
+  * Fix build for 6.6
+  * Fix build for kernel 6.6
+  * Fixes for kernel 6.3+
+  * Update README.md
+  * Create UNINSTALL.sh script and update README.md
+  * fix for kernel 6.1
+  * Add TASK_FREEZABLE
+  * Fix build on 6.1 kernel
+
+-------------------------------------------------------------------
+Fri Sep 02 04:37:49 UTC 2022 - munix9@googlemail.com
+
+- Update to version 20200614.98f0f3b:
+  * docs: describe the purpose of the INSTALL.sh
+  * feat: add script that automates install steps
+  * travis: Add kernel v5.4
+  * Add KVER=5.2 and KVER=5.3 to travis configuration
+  * Update Travis configuration
+  * Update Travis configuration
+  * Update Travis configuration
+  * Update Travis configuration to use GCC 8
+  * Add KVER=5.0 and KVER=5.1 to travis configuration
+
