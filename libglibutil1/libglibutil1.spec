@@ -1,7 +1,8 @@
 #
-# spec file for package libglibutil
+# spec file for package anbox-modules
 #
-# Copyright (c) 2025 SUSE LLC
+# Copyright (c) 2026 SUSE LLC
+# Copyright (c) 2026 James "Jim" Ed Randson <jimedrand@disroot.org>
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -64,5 +65,5 @@ make -C  test test
 %{_includedir}/gutil/
 
 %changelog
-* Thu Jun 19 2025 James Ed Randson <jimedrand@disroot.org> - 1.0.80
+* Sat Jan 17 2026 James Ed Randson <jimedrand@disroot.org> - 1.0.80
 - Maintain an package %{libname}
