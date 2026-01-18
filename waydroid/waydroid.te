@@ -16,7 +16,6 @@ require {
 	type tmp_t;
 	type http_cache_port_t;
 	type rpm_script_t;
-	role rpm_script_roles;
 	type iptables_t;
 	type systemd_systemctl_exec_t;
 	type systemd_unit_file_t;
@@ -24,6 +23,11 @@ require {
 	type kernel_t;
 	type debugfs_t;
 	type init_t;
+	type device_t;
+	type user_tmp_t;
+	type data_home_t;
+	type container_runtime_t;
+	type container_runtime_exec_t;
 }
 
 # Define domain
@@ -34,7 +38,6 @@ init_daemon_domain(waydroid_t, waydroid_exec_t)
 # Execute python
 allow waydroid_t bin_t:file { map execute };
 allow waydroid_t proc_t:file read_file_perms;
-gnome_search_gconf_data_dir(waydroid_t)
 auth_read_passwd(waydroid_t)
 miscfiles_read_generic_certs(waydroid_t)
 
@@ -55,13 +58,7 @@ manage_dirs_pattern(waydroid_t, waydroid_data_t, waydroid_data_t)
 manage_files_pattern(waydroid_t, waydroid_data_t, waydroid_data_t)
 manage_lnk_files_pattern(waydroid_t, waydroid_data_t, waydroid_data_t)
 
-# Execute lxc commands, domain transition
-# container_runtime_domtrans(waydroid_t) is not available in all SELinux policies
-# Use manual domain transition instead
-require {
-	type container_runtime_t;
-	type container_runtime_exec_t;
-}
+# Execute lxc/container commands - domain transition
 domtrans_pattern(waydroid_t, container_runtime_exec_t, container_runtime_t)
 
 # Execute misc utils
@@ -157,9 +154,10 @@ dev_setattr_video_dev(waydroid_t)
 userdom_search_user_tmp_dirs(waydroid_t)
 allow waydroid_t user_tmp_t:sock_file getattr;
 
-# RPM upgrade scriptlets
-container_runtime_run(rpm_script_t, rpm_script_roles)
+# RPM upgrade scriptlets - allow rpm_script to manage waydroid data
 filetrans_pattern(rpm_script_t, var_lib_t, waydroid_data_t, dir, "waydroid")
+allow rpm_script_t waydroid_data_t:dir { create_dir_perms };
+allow rpm_script_t waydroid_data_t:file { create_file_perms };
 
 # For when we crash
 allow abrt_t binder_device_t:chr_file { open read };
@@ -177,15 +175,8 @@ can_exec(waydroid_t, waydroid_tmpfs_t)
 fs_tmpfs_filetrans(waydroid_t, waydroid_tmpfs_t, file)
 dbus_system_bus_client(waydroid_t)
 dbus_connect_system_bus(waydroid_t)
-policykit_dbus_chat(waydroid_t)
-unconfined_dbus_chat(waydroid_t)
-unconfined_signal(waydroid_t)
 allow waydroid_t self:capability kill;
 
-# Snap
-optional_policy(`
-	require {
-		type snappy_var_lib_t;
-	}
-	dontaudit waydroid_t snappy_var_lib_t:dir search_dir_perms;
-')
+# Allow unconfined interaction
+allow unconfined_t waydroid_t:process signal;
+allow waydroid_t unconfined_t:unix_stream_socket connectto;
