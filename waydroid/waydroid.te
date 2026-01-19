@@ -96,7 +96,7 @@ files_type(waydroid_rootfs_t)
 read_files_pattern(waydroid_t, waydroid_rootfs_t, waydroid_rootfs_t)
 
 # Read android data
-allow waydroid_t self:capability { dac_read_search };
+allow waydroid_t self:capability { dac_read_search fowner };
 
 # Upgrade from app
 allow waydroid_t self:capability dac_override;
