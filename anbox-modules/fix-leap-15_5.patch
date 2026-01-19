@@ -27,7 +27,7 @@
  	ret = security_binder_transfer_file(proc->cred, target_proc->cred, file);
  #else
  	ret = security_binder_transfer_file(proc->tsk, target_proc->tsk, file);
-@@ -2996,7 +2996,7 @@ static void binder_transaction(struct bi
+@@ -3000,7 +3000,7 @@ static void binder_transaction(struct bi
  			return_error_line = __LINE__;
  			goto err_invalid_target_handle;
  		}
@@ -36,7 +36,7 @@
  		if (security_binder_transaction(proc->cred,
  						target_proc->cred) < 0) {
  #else
-@@ -4952,7 +4952,7 @@ static int binder_ioctl_set_ctx_mgr(stru
+@@ -4993,7 +4993,7 @@ static int binder_ioctl_set_ctx_mgr(stru
  		ret = -EBUSY;
  		goto out;
  	}

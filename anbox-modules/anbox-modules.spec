@@ -33,7 +33,9 @@ Group:          System/Kernel
 URL:            https://github.com/llyyr/anbox-modules
 Source0:        %{name}-%{version}.tar.gz
 Source1:        %{name}-preamble
+%if 0%{?suse_version} == 1550
 Patch0:         fix-leap-15_5.patch
+%endif
 BuildRequires:  %{kernel_module_package_buildreqs}
 BuildRequires:  pesign-obs-integration
 %if 0%{?kmp_longterm}
@@ -67,7 +69,13 @@ DKMS will automatically rebuild the module when new kernels are installed,
 ensuring compatibility across kernel updates without requiring manual intervention.
 
 %prep
-%autosetup -p1
+# Source code setup
+%setup -q -n %{name}-%{version}
+
+# Apply specific patch for Leap 15.5
+%if 0%{?suse_version} == 1550
+%patch -P 0 -p1
+%endif
 
 set -- *
 mkdir source
