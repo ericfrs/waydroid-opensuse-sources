@@ -28,6 +28,7 @@ require {
 	type data_home_t;
 	type container_runtime_t;
 	type container_runtime_exec_t;
+	type gconf_home_t;
 }
 
 # Define domain
@@ -137,6 +138,9 @@ allow waydroid_t systemd_unit_file_t:dir search;
 
 # Debugfs
 allow waydroid_t debugfs_t:file { getattr setattr };
+
+# Gconf
+allow waydroid_t gconf_home_t:dir search;
 
 # Graphics
 dev_setattr_generic_dirs(waydroid_t)
