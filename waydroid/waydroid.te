@@ -138,6 +138,9 @@ allow waydroid_t systemd_unit_file_t:dir search;
 # Debugfs
 allow waydroid_t debugfs_t:file { getattr setattr };
 
+# Gconf
+allow waydroid_t gconf_home_t:dir search;
+
 # Graphics
 dev_setattr_generic_dirs(waydroid_t)
 dev_getattr_dri_dev(waydroid_t)
