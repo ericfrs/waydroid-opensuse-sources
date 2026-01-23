@@ -28,6 +28,7 @@ require {
 	type data_home_t;
 	type container_runtime_t;
 	type container_runtime_exec_t;
+	type gconf_home_t;
 }
 
 # Define domain
