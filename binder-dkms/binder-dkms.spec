@@ -51,7 +51,7 @@ ensuring compatibility across kernel updates without requiring manual interventi
 
 %prep
 %setup -q -n anbox-modules-%{commit}
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 
@@ -238,6 +238,7 @@ fi
 - Updated all internal references to binder-dkms
 - Added conflict with older anbox-modules-dkms for safety
 - Applied fix-leap-15_5.patch for Leap 15.5/15.6/16.0 compatibility
+- Fixed patch syntax to comply with modern RPM version requirements
 - Converted to DKMS-only package (removed KMP variant)
 - Package is now noarch (architecture-independent)
 - Simplified build process without kernel compilation at build time
