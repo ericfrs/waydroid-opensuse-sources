@@ -28,6 +28,7 @@ License:        GPL-2.0-only
 Group:          System/Kernel
 URL:            https://github.com/choff/anbox-modules
 Source0:        https://github.com/choff/anbox-modules/archive/%{commit}.tar.gz#/%{name}-%{version}.tar.gz
+Patch0:         fix-leap-15_5.patch
 BuildArch:      noarch
 Requires:       dkms
 Requires:       gcc
@@ -50,6 +51,7 @@ ensuring compatibility across kernel updates without requiring manual interventi
 
 %prep
 %setup -q -n anbox-modules-%{commit}
+%patch0 -p1
 
 %build
 
@@ -235,6 +237,7 @@ fi
 - Renamed package to binder-dkms
 - Updated all internal references to binder-dkms
 - Added conflict with older anbox-modules-dkms for safety
+- Applied fix-leap-15_5.patch for Leap 15.5/15.6/16.0 compatibility
 - Converted to DKMS-only package (removed KMP variant)
 - Package is now noarch (architecture-independent)
 - Simplified build process without kernel compilation at build time
