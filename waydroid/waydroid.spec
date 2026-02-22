@@ -62,7 +62,7 @@ Requires:       python3-gbinder
 Requires:       python3-gobject
 Requires:       hicolor-icon-theme
 Requires:       desktop-file-utils
-Requires:       container-selinux
+Requires:       (%{name}-selinux = %{version}-%{release} if selinux-policy-%{selinuxtype})
 
 # Provide choice between DKMS and KMP for kernel modules
 # anbox-modules is a meta package that will pull appropriate KMP
@@ -73,6 +73,14 @@ Recommends:     anbox-modules-dkms
 Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system. It uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.
 
 The Android inside the container has direct access to needed hardware through LXC. The Android runtime environment ships with a minimal customized Android system image based on LineageOS.
+
+%package selinux
+Summary:        SELinux policy module for waydroid
+Requires:       %{name} = %{version}-%{release}
+Requires:       container-selinux
+
+%description selinux
+This package contains the SELinux policy module necessary to run waydroid.
 
 %prep
 %autosetup -p1
@@ -108,11 +116,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/id.waydro
 
 %pre
 %service_add_pre waydroid-container.service
-%selinux_relabel_pre -s %{selinuxtype}
 
 %post
-%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/%{selinuxtype}/%{name}.pp
-%selinux_relabel_post -s %{selinuxtype}
 %service_add_post waydroid-container.service
 
 if [ $1 -eq 1 ]; then
@@ -160,6 +165,18 @@ fi
 %postun
 %service_del_postun waydroid-container.service
 
+%pre selinux
+%selinux_relabel_pre -s %{selinuxtype}
+
+%post selinux
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/%{selinuxtype}/%{name}.pp
+%selinux_relabel_post -s %{selinuxtype}
+if [ "$1" -le "1" ]; then
+    # On first install, restart the daemon for the custom label to be applied
+    %service_del_postun_with_restart waydroid-container.service
+fi
+
+%postun selinux
 if [ $1 -eq 0 ]; then
     %selinux_modules_uninstall -s %{selinuxtype} %{name}
     %selinux_relabel_post -s %{selinuxtype}
@@ -187,6 +204,9 @@ fi
 %dir %{_datadir}/gbinder
 %dir %{_datadir}/gbinder/config
 %{_datadir}/gbinder/config/waydroid.conf
+
+%files selinux
+%doc SELinux/%{name}.te
 %dir %{_datadir}/selinux
 %dir %{_datadir}/selinux/%{selinuxtype}
 %{_datadir}/selinux/%{selinuxtype}/%{name}.pp
