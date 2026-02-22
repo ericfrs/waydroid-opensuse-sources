@@ -19,7 +19,7 @@
 %define selinuxtype targeted
 
 Name:           waydroid
-Version:        1.6.1
+Version:        1.6.2
 Release:        1
 Summary:        Container-based approach to boot a full Android system on GNU/Linux
 License:        GPL-3.0-only
