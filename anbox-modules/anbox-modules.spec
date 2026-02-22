@@ -30,7 +30,7 @@ Release:        0
 Summary:        Anbox binder kernel module
 License:        GPL-2.0-only
 Group:          System/Kernel
-URL:            https://github.com/llyyr/anbox-modules
+URL:            https://github.com/ericfrs/anbox-modules
 Source0:        %{name}-%{version}.tar.gz
 Source1:        %{name}-preamble
 %if 0%{?suse_version} == 1550
