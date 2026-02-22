@@ -90,8 +90,6 @@ cp %{SOURCE1} SELinux/
 cp %{SOURCE2} SELinux/
 
 %build
-sed -i -e '/"system_channel":/ s/: ".*"/: ""/' tools/config/__init__.py
-sed -i -e '/"vendor_channel":/ s/: ".*"/: ""/' tools/config/__init__.py
 
 cd SELinux
 %make_build NAME=%{selinuxtype} -f %{_datadir}/selinux/devel/Makefile
