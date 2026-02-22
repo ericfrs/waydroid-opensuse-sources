@@ -120,40 +120,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/id.waydro
 %post
 %service_add_post waydroid-container.service
 
-if [ $1 -eq 1 ]; then
-cat << 'EOF'
-
-================================================================================
-Waydroid Installation Complete
-================================================================================
-
-Kernel modules required. Choose one:
-
-1. anbox-modules-dkms (recommended)
-   - Rebuilds automatically for every kernel update
-   - Works with all kernel flavors (default, longterm, etc.)
-   Install: zypper install anbox-modules-dkms
-
-2. anbox-modules (KMP - Kernel Module Package)
-   - Pre-compiled for specific kernel version
-   - Faster installation, no compilation needed
-   - Auto-selects correct variant for your kernel
-   Install: zypper install anbox-modules
-
-After installing, load module: sudo modprobe binder_linux
-
-EOF
-fi
-
-if [ $1 -gt 1 ]; then
-cat << 'EOF'
-
-================================================================================
-Waydroid Upgrade Complete
-================================================================================
-
-EOF
-fi
+# Ensure binder module is loaded 
+modprobe binder_linux 2>/dev/null || :
 
 if [ -x %{_bindir}/waydroid ]; then
     %{_bindir}/waydroid upgrade -o >/dev/null 2>&1 || :
