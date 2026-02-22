@@ -187,6 +187,8 @@ fi
 %dir %{_datadir}/gbinder
 %dir %{_datadir}/gbinder/config
 %{_datadir}/gbinder/config/waydroid.conf
+%dir %{_datadir}/selinux
+%dir %{_datadir}/selinux/%{selinuxtype}
 %{_datadir}/selinux/%{selinuxtype}/%{name}.pp
 
 %changelog
