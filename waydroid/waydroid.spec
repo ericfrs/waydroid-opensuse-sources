@@ -63,11 +63,8 @@ Requires:       python3-gobject
 Requires:       hicolor-icon-theme
 Requires:       desktop-file-utils
 Requires:       (%{name}-selinux = %{version}-%{release} if selinux-policy-%{selinuxtype})
-
-# Provide choice between DKMS and KMP for kernel modules
-# anbox-modules is a meta package that will pull appropriate KMP
-Requires:       (anbox-modules-dkms or anbox-modules)
-Recommends:     anbox-modules-dkms
+Requires:       anbox-kmp
+Recommends:     anbox-modules-autoload
 
 %description
 Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system. It uses Linux namespaces (user, pid, uts, net, mount, ipc) to run a full Android system in a container and provide Android applications on any GNU/Linux-based platform.
